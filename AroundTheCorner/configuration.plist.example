@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   configuration.plist
+   AroundTheCorner
+
+   Created by António Nuno Monteiro on 15/11/15.
+   Copyright (c) 2015 António Nuno Monteiro. All rights reserved.
+-->
+<plist version="1.0">
+<dict>
+	<key>GoogleMapsAPI</key>
+	<dict>
+		<key>APIKey</key>
+		<string>YOUR API KEY HERE</string>
+	</dict>
+  <key>GooglePlacesAPI</key>
+	<dict>
+		<key>APIKey</key>
+		<string>YOUR API KEY HERE</string>
+	</dict>
+</dict>
+</plist>
