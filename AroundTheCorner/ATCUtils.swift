@@ -1,5 +1,5 @@
 //
-//  Utils.swift
+//  ATCUtils.swift
 //  AroundTheCorner
 //
 //  Created by António Nuno Monteiro on 15/11/15.
@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class ATCUtils {
 
@@ -26,5 +27,18 @@ class ATCUtils {
             
         }
         return nil
+    }
+    
+    static func scaleUIImageToSize(let image: UIImage, let size: CGSize) -> UIImage {
+        let hasAlpha = false
+        let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+        
+        UIGraphicsBeginImageContextWithOptions(size, !hasAlpha, scale)
+        image.drawInRect(CGRect(origin: CGPointZero, size: size))
+        
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return scaledImage
     }
 }
