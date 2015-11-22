@@ -28,7 +28,11 @@ class BookmarkListViewController: UIViewController, UITableViewDelegate, UITable
         // remove empty space at the top of the table view
         self.automaticallyAdjustsScrollViewInsets = false
     }
-
+    
+    func click(sender: UIButton) {
+        self.performSegueWithIdentifier("showSingleBookmarkSegue", sender: self)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -36,10 +40,8 @@ class BookmarkListViewController: UIViewController, UITableViewDelegate, UITable
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showSingleBookmarkSegue" {
-            print(navigationController)
-//            let nextController = (segue.destinationViewController as! UINavigationController).topViewController as! BookmarkViewController
-            let nextController = (segue.destinationViewController as! BookmarkViewController)
-            //self.navigationController?.pushViewController(nextController, animated: true)
+            let nextController = (segue.destinationViewController as! SinglePlaceViewController)
+
             //we know that sender is an NSIndexPath here.
             let row = (sender as! NSIndexPath).row;
             let bookmark = self.bookmarks[row]
@@ -52,10 +54,11 @@ class BookmarkListViewController: UIViewController, UITableViewDelegate, UITable
      ** UITableView Methods **
      **                     **
      *************************/
-    
+
     // TODO: use actual bookmarks
     // dummy bookmark for now
-    let bookmarks = [Bookmark(name: "Club 11 e.V.", type: "Bar", ratings: [3, 4, 3, 4])]
+    let bookmarks = [SinglePlace(name: "Club 11 e.V.", type: "Bar", ratings: [3, 4, 3, 4], photoURL: "placeTestImg",
+                                address: "Hochschulstraße 48, 01069 Dresden", phone: "0351 2644456", website: "http://clubelf.de", isOpenNow: false)]
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return bookmarks.count
@@ -80,6 +83,7 @@ class BookmarkListViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         // TODO: verify if this is still an issue -> https://forums.developer.apple.com/thread/24135
+        // and: http://stackoverflow.com/questions/32643765
         self.performSegueWithIdentifier("showSingleBookmarkSegue", sender: indexPath)
     }
 

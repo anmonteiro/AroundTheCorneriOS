@@ -46,7 +46,6 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
                       "Liquor Store", "Night Club", "Restaurant"]
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        
         return 2;
     }
     
