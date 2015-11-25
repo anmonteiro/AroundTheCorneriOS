@@ -13,6 +13,8 @@
 		F14029CC1BF8E86E0003097B /* ATCUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14029CB1BF8E86E0003097B /* ATCUtils.swift */; };
 		F14029CE1C00BD190003097B /* SinglePlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14029CD1C00BD190003097B /* SinglePlace.swift */; };
 		F14029D01C00D5CF0003097B /* SinglePlaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14029CF1C00D5CF0003097B /* SinglePlaceViewController.swift */; };
+		F14029D21C032CA50003097B /* WriteReviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14029D11C032CA50003097B /* WriteReviewViewController.swift */; };
+		F14029D41C0335550003097B /* RatingControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14029D31C0335550003097B /* RatingControl.swift */; };
 		F15443F41BF77784009D3314 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15443F31BF77784009D3314 /* AppDelegate.swift */; };
 		F15443F61BF77784009D3314 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15443F51BF77784009D3314 /* MapViewController.swift */; };
 		F15443F81BF77784009D3314 /* BookmarkListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F15443F71BF77784009D3314 /* BookmarkListViewController.swift */; };
@@ -65,6 +67,8 @@
 		F14029CB1BF8E86E0003097B /* ATCUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ATCUtils.swift; sourceTree = "<group>"; };
 		F14029CD1C00BD190003097B /* SinglePlace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SinglePlace.swift; sourceTree = "<group>"; };
 		F14029CF1C00D5CF0003097B /* SinglePlaceViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SinglePlaceViewController.swift; sourceTree = "<group>"; };
+		F14029D11C032CA50003097B /* WriteReviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WriteReviewViewController.swift; sourceTree = "<group>"; };
+		F14029D31C0335550003097B /* RatingControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
 		F15443F01BF77784009D3314 /* AroundTheCorner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AroundTheCorner.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F15443F31BF77784009D3314 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F15443F51BF77784009D3314 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -132,6 +136,7 @@
 		F15443E71BF77784009D3314 = {
 			isa = PBXGroup;
 			children = (
+				F14029D31C0335550003097B /* RatingControl.swift */,
 				F15443F21BF77784009D3314 /* AroundTheCorner */,
 				F15444091BF77784009D3314 /* AroundTheCornerTests */,
 				F15444141BF77784009D3314 /* AroundTheCornerUITests */,
@@ -159,12 +164,13 @@
 				F15443F31BF77784009D3314 /* AppDelegate.swift */,
 				F16E22CA1BF8DF5E0010E58A /* ATCPlacesClient.swift */,
 				F14029CB1BF8E86E0003097B /* ATCUtils.swift */,
-				F14029CD1C00BD190003097B /* SinglePlace.swift */,
 				F15443F71BF77784009D3314 /* BookmarkListViewController.swift */,
-				F14029CF1C00D5CF0003097B /* SinglePlaceViewController.swift */,
 				F15444231BF79140009D3314 /* DismissSegue.swift */,
 				F15444271BF7972F009D3314 /* FilterViewController.swift */,
 				F15443F51BF77784009D3314 /* MapViewController.swift */,
+				F14029CD1C00BD190003097B /* SinglePlace.swift */,
+				F14029CF1C00D5CF0003097B /* SinglePlaceViewController.swift */,
+				F14029D11C032CA50003097B /* WriteReviewViewController.swift */,
 				F15443FC1BF77784009D3314 /* Assets.xcassets */,
 				F15443FE1BF77784009D3314 /* LaunchScreen.storyboard */,
 				F15443F91BF77784009D3314 /* Main.storyboard */,
@@ -375,6 +381,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F14029D21C032CA50003097B /* WriteReviewViewController.swift in Sources */,
+				F14029D41C0335550003097B /* RatingControl.swift in Sources */,
 				F15443F81BF77784009D3314 /* BookmarkListViewController.swift in Sources */,
 				F15443F41BF77784009D3314 /* AppDelegate.swift in Sources */,
 				F15444241BF79140009D3314 /* DismissSegue.swift in Sources */,

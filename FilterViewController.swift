@@ -22,18 +22,13 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // remove navigationBar's background and shadow
-        for parent in self.navigationBar!.subviews {
-            for childView in parent.subviews {
-                if(childView is UIImageView) {
-                    childView.removeFromSuperview()
-                }
-            }
-        }
+        ATCUtils.removeNavBarBgAndShadow(self.navigationBar)
         
         // associate the table view with this view controller
         self.filterTableView.delegate = self;
         self.filterTableView.dataSource = self;
+        
+        // TODO: set up the "Apply" button's action
     }
     
     /*************************

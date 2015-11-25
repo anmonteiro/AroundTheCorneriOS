@@ -125,6 +125,13 @@ class SinglePlaceViewController : UIViewController, UITableViewDelegate, UITable
         
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "writeReviewSegue" {
+            let nextController = segue.destinationViewController as! WriteReviewViewController
+            nextController.place = bookmark!
+        }
+    }
+    
     /*************************
      **                     **
      ** UITableView Methods **
@@ -215,11 +222,41 @@ class SinglePlaceViewController : UIViewController, UITableViewDelegate, UITable
                     cell?.detailTextLabel?.text = "From " + String((bookmark?.numRatings)!) + " user reviews"
                 }
                 else {
+                    // TODO: Consider changing this to a simple button; would make things easier
+                    cell = UITableViewCell(style: .Default, reuseIdentifier: "tableCellDefault")
+                    cell?.accessoryType = .None
+                    //cell?.indentationLevel = 4
+                    cell?.textLabel?.textAlignment = .Center
+                    cell?.detailTextLabel?.text = ""
+                    cell?.detailTextLabel?.textAlignment = .Right
+                    cell?.textLabel?.font = UIFont.systemFontOfSize(17.0, weight: UIFontWeightHeavy)
                     cell?.textLabel?.text = "Leave a review!"
                 }
             }
         }
         
         return cell!
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if self.segmentedControl.selectedSegmentIndex == 0 {
+            // Details tableview
+        }
+        else {
+            // Reviews tableview
+            if indexPath.section == 0 {
+                // Google Ratings
+            }
+            else {
+                if indexPath.row == 0 {
+                    // ATC Ratings
+                }
+                else {
+                    // "Leave a review"
+                    // Assume row == 1 (2nd row)
+                    self.performSegueWithIdentifier("writeReviewSegue", sender: self)
+                }
+            }
+        }
     }
 }

@@ -41,4 +41,15 @@ class ATCUtils {
         
         return scaledImage
     }
+    
+    static func removeNavBarBgAndShadow(navBar : UINavigationBar) {
+        // remove navigationBar's background and shadow
+        for parent in navBar.subviews {
+            for childView in parent.subviews {
+                if(childView is UIImageView) {
+                    childView.removeFromSuperview()
+                }
+            }
+        }
+    }
 }
