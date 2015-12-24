@@ -19,9 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     if let GMapsAPIKey = ATCUtils.readConfigurationFor(keys: ["GoogleMapsAPI", "APIKey"]) {
       GMSServices.provideAPIKey(GMapsAPIKey)
     }
-//    if let GPlacesAPIKey = ATCUtils.readConfigurationFor(keys: ["GooglePlacesAPI", "APIKey"]) {
-//      GMSServices.provideAPIKey(GPlacesAPIKey)
-//    }
     
     return true
   }

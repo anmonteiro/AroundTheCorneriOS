@@ -9,10 +9,11 @@
 import UIKit
 import GoogleMaps
 
-class MapViewController: UIViewController, CLLocationManagerDelegate {
+class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
   var locationManager = CLLocationManager()
   var didFindMyLocation = false
   var filters : [String]? = nil
+  var radius : Int? = nil
   
   @IBOutlet weak var filterBtn: UIBarButtonItem!
   
@@ -31,24 +32,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
     //mapView.myLocationEnabled = true
     mapView.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
     mapView.padding = UIEdgeInsetsMake(64, 0, 64, 0)
-
-    self.view = mapView
     
+    self.view = mapView
+    mapView.delegate = self
+
     self.filterBtn.target = self
     self.filterBtn.action = "toFilterView:"
-    
-    // TODO: call Places API & present the markers according to the active filters
-    /*
-    let marker = GMSMarker()
-    marker.position = CLLocationCoordinate2DMake(-33.86, 151.20)
-    marker.title = "Sydney"
-    marker.snippet = "Australia"
-    marker.map = mapView
-    */
   }
   
   func toFilterView(sender: AnyObject) {
-    self.performSegueWithIdentifier("toFilterViewSegue", sender: self)
+    self.performSegueWithIdentifier("toFilterViewSegue", sender: nil)
   }
   
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -56,23 +49,25 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
       let viewController = segue.destinationViewController as! FilterViewController
       viewController.mapViewControllerInstance = self
     }
+    else if segue.identifier == "showSinglePlaceSegue" {
+      let nextViewController = segue.destinationViewController as! SinglePlaceViewController
+      let thePlace = sender as! SinglePlace
+      nextViewController.bookmark = thePlace
+    }
   }
   
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
-    //        print("view will appear")
-    //        if let mapView = self.view as? GMSMapView {
-    //            print("view is mapview")
-    //            if let currLoc = mapView.myLocation {
-    //                print("current location: \(currLoc)")
-    //                //mapView.animateToLocation(<#T##location: CLLocationCoordinate2D##CLLocationCoordinate2D#>)
-    //            }
-    //            else {
-    //                print("still waiting for user's location or not enabled.")
-    //            }
-    //        }
+    if filters == nil {
+      filters = ["restaurant", "bar"]
+    }
+    if radius == nil {
+      radius = 150
+    }
+    populateNearbyPlaces();
+    
   }
-
+  
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
@@ -98,8 +93,48 @@ class MapViewController: UIViewController, CLLocationManagerDelegate {
       }
       
       didFindMyLocation = true
+      populateNearbyPlaces()
     }
   }
   
+  func populateNearbyPlaces() {
+    if let loc = (self.view as! GMSMapView).myLocation {
+      ATCPlacesClient.getNearbyPlaces(withFilters: filters!, radius: radius!, location: loc.coordinate, callback: {
+        (results) -> Void in
+        (self.view as! GMSMapView).clear()
+        for place in results {
+          let marker = GMSMarker()
+          let location = place["geometry"]!!["location"]!!
+          marker.position = CLLocationCoordinate2DMake(location["lat"]!! as! CLLocationDegrees, location["lng"]!! as! CLLocationDegrees)
+          let iconImgData = NSData(contentsOfURL: NSURL(string: place["icon"]!! as! String)!)
+          let iconImg = UIImage(data: iconImgData!)
+          let scaledIconImg = UIImage(CGImage: (iconImg?.CGImage)!, scale: (iconImg?.scale)! * 2, orientation: (iconImg?.imageOrientation)!)
+          marker.icon = scaledIconImg
+          marker.title = place["name"]!! as! String
+          marker.appearAnimation = kGMSMarkerAnimationPop
+          marker.snippet = "More >>"
+          marker.map = (self.view as! GMSMapView)
+          marker.userData = place["place_id"] as! String
+        }
+      })
+    }
+  }
+  
+  func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
+    let placeID = marker.userData as! String
+    ATCPlacesClient.getPlaceDetails(placeID: placeID, callback: {
+      (result) -> Void in
+      let address = result["formatted_address"] as! String
+      let phone_nr = result["international_phone_number"]! != nil ? result["international_phone_number"] as! String : "-"
+      let name = result["name"] as! String
+      let openNow = result["opening_hours"]! != nil ? result["opening_hours"]!!["open_now"] as! Bool : false
+      let type = result["types"]!![0] as! String
+      let website = result["website"]! != nil ? result["website"] as! String : "-"
+      
+      let thePlace = SinglePlace(name: name, type: type, ratings: [Int](), photoURL: "https://lh5.googleusercontent.com/-_l6M9ow75P4/VaIv0z1TqKI/AAAAAAAAAG0/ASZOidnvDHE/s1600-h500/", address: address, phone: phone_nr, website: website, isOpenNow: openNow)
+      
+      self.performSegueWithIdentifier("showSinglePlaceSegue", sender: thePlace)
+    })
+  }
 }
 

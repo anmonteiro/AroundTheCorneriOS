@@ -31,6 +31,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="filterBtn" destination="WM7-wu-Rgd" id="lAY-1J-5AR"/>
+                        <segue destination="IEZ-Cc-jhI" kind="show" identifier="showSinglePlaceSegue" id="J3a-9X-U2y"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
@@ -252,6 +253,7 @@
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" id="UiL-CP-DWO"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -425,7 +427,7 @@
         <image name="tabbar-settings" width="33" height="33"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="4TV-QL-4f7"/>
-        <segue reference="epi-u8-laN"/>
+        <segue reference="v3r-Bo-YxD"/>
+        <segue reference="J3a-9X-U2y"/>
     </inferredMetricsTieBreakers>
 </document>

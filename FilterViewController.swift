@@ -14,6 +14,7 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
   @IBOutlet weak var navigationBar: UINavigationBar!
   @IBOutlet weak var filterTableView: UITableView!
   @IBOutlet weak var applyBtn: UIBarButtonItem!
+  var stepper : ATCRadiusStepper? = nil
   
   /****************************
    **                        **
@@ -47,15 +48,22 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
     else {
       // TODO: what to do for empty selection?
     }
-    self.performSegueWithIdentifier("applyFiltersSegue", sender: places)
+    let radiusValue = self.stepper!.value
+    let filterDict = ["places" : places, "radius" : radiusValue]
+    
+    self.performSegueWithIdentifier("applyFiltersSegue", sender: filterDict)
   }
   
   
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "applyFiltersSegue" {
-      //we know that sender is an array here.
-      let filters = sender as! Array<String>;
+      //we know that sender is dictionary here.
+      let filterDict = sender as! [String : AnyObject];
+      let filters = filterDict["places"] as! Array<String>
+      let radiusValue = filterDict["radius"] as! Int
+      
       mapViewControllerInstance?.filters = filters
+      mapViewControllerInstance?.radius = radiusValue
     }
   }
 
@@ -91,27 +99,28 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
     let cell = tableView.dequeueReusableCellWithIdentifier("tableCell", forIndexPath: indexPath)
     
     if indexPath.section == 0 {
-      // "search radius" slider section
-      let slider = UISlider()
+      // "search radius" stepper section
+      let rect = CGRectMake(0, 0, cell.bounds.width, cell.bounds.height)
+      let stepper = ATCRadiusStepper(frame: rect)
       
-      // TODO: fix images showing as black rectangle
-      cell.contentView.addSubview(slider)
-      let imgSize = CGSize(width: slider.bounds.size.height, height: slider.bounds.size.height)
-      let minImage = ATCUtils.scaleUIImageToSize(UIImage(named: "slider-minus")!, size: imgSize)
-      let maxImage = ATCUtils.scaleUIImageToSize(UIImage(named: "slider-plus")!, size: imgSize)
-      slider.minimumValueImage = minImage
-      slider.maximumValueImage = maxImage
+      self.stepper = stepper
+
+      stepper.minimumValue = 0
+      stepper.maximumValue = 50000
       
-      slider.bounds = CGRectMake(0, 0, cell.contentView.bounds.size.width - 10, slider.bounds.size.height)
-      slider.center = CGPointMake(CGRectGetMidX(cell.contentView.bounds), CGRectGetMidY(cell.contentView.bounds))
-      //slider.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+      stepper.value = 150
+      stepper.stepValue = 50
+
+      cell.contentView.addSubview(stepper)
     }
     else {
       // place types section
       let filters = Array(placeTypes.keys)
       cell.textLabel?.text = filters[indexPath.row]
+      if self.mapViewControllerInstance!.filters!.contains(placeTypes[filters[indexPath.row]]!) {
+        tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: UITableViewScrollPosition.None)
+      }
       
-      // TODO: make cells selected according to the configuration in MapView
       if cell.selected {
         cell.accessoryType = UITableViewCellAccessoryType.Checkmark
       }

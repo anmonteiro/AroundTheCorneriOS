@@ -9,7 +9,7 @@
 import UIKit
 
 class SinglePlaceViewController : UIViewController, UITableViewDelegate, UITableViewDataSource {
-    var bookmark : SinglePlace? = nil
+  var bookmark : SinglePlace? = nil
     
     @IBOutlet weak var placeImageView: UIImageView!
     @IBOutlet weak var placeTypeLabel: UILabel!
