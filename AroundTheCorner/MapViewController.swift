@@ -131,7 +131,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       let type = result["types"]!![0] as! String
       let website = result["website"]! != nil ? result["website"] as! String : "-"
       
-      let thePlace = SinglePlace(name: name, type: type, ratings: [Int](), photoURL: "https://lh5.googleusercontent.com/-_l6M9ow75P4/VaIv0z1TqKI/AAAAAAAAAG0/ASZOidnvDHE/s1600-h500/", address: address, phone: phone_nr, website: website, isOpenNow: openNow)
+      let thePlace = SinglePlace(id: placeID, name: name, type: type, ratings: [Int](), photoURL: "https://lh5.googleusercontent.com/-_l6M9ow75P4/VaIv0z1TqKI/AAAAAAAAAG0/ASZOidnvDHE/s1600-h500/", address: address, phone: phone_nr, website: website, isOpenNow: openNow)
       
       self.performSegueWithIdentifier("showSinglePlaceSegue", sender: thePlace)
     })

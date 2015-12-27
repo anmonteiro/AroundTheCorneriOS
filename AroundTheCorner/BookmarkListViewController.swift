@@ -9,83 +9,84 @@
 import UIKit
 
 class BookmarkListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
-    @IBOutlet weak var bookmarksTableView: UITableView!
+  
+  @IBOutlet weak var bookmarksTableView: UITableView!
+  
+  /****************************
+   **                        **
+   ** ViewController Methods **
+   **                        **
+   ****************************/
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    // Do any additional setup after loading the view, typically from a nib.
     
-    /****************************
-     **                        **
-     ** ViewController Methods **
-     **                        **
-     ****************************/
+    self.bookmarksTableView.delegate = self;
+    self.bookmarksTableView.dataSource = self;
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        self.bookmarksTableView.delegate = self;
-        self.bookmarksTableView.dataSource = self;
-        
-        // remove empty space at the top of the table view
-        self.automaticallyAdjustsScrollViewInsets = false
+    // remove empty space at the top of the table view
+    self.automaticallyAdjustsScrollViewInsets = false
+  }
+  
+  override func viewWillAppear(animated: Bool) {
+    super.viewWillAppear(animated)
+    
+    bookmarksTableView.reloadData()
+  }
+  
+  func click(sender: UIButton) {
+    self.performSegueWithIdentifier("showSingleBookmarkSegue", sender: self)
+  }
+  
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+    // Dispose of any resources that can be recreated.
+  }
+  
+  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    if segue.identifier == "showSingleBookmarkSegue" {
+      let nextController = (segue.destinationViewController as! SinglePlaceViewController)
+      
+      //we know that sender is an NSIndexPath here.
+      let row = (sender as! NSIndexPath).row;
+      let bookmark = BookmarksManager.sharedInstance.bookmarks[row]
+      nextController.bookmark = bookmark
     }
+  }
+  
+  /*************************
+   **                     **
+   ** UITableView Methods **
+   **                     **
+   *************************/
+   
+  func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    return BookmarksManager.sharedInstance.bookmarks.count
+  }
+  
+  func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    //
+    return nil
+  }
+  
+  func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    let cell = bookmarksTableView.dequeueReusableCellWithIdentifier("tableCell", forIndexPath: indexPath)
     
-    func click(sender: UIButton) {
-        self.performSegueWithIdentifier("showSingleBookmarkSegue", sender: self)
-    }
+    cell.textLabel?.text = BookmarksManager.sharedInstance.bookmarks[indexPath.row].placeName
+    cell.detailTextLabel?.text = BookmarksManager.sharedInstance.bookmarks[indexPath.row].placeType + " " + "3.5"//String(bookmarks[indexPath.row].avgRating)
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    // TODO: change to blue
+    cell.accessoryType = .DisclosureIndicator
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "showSingleBookmarkSegue" {
-            let nextController = (segue.destinationViewController as! SinglePlaceViewController)
-
-            //we know that sender is an NSIndexPath here.
-            let row = (sender as! NSIndexPath).row;
-            let bookmark = self.bookmarks[row]
-            nextController.bookmark = bookmark
-        }
-    }
-    
-    /*************************
-     **                     **
-     ** UITableView Methods **
-     **                     **
-     *************************/
-
-    // TODO: use actual bookmarks
-    // dummy bookmark for now
-    let bookmarks = [SinglePlace(name: "Club 11 e.V.", type: "Bar", ratings: [3, 4, 3, 4], photoURL: "placeTestImg",
-                                address: "Hochschulstraße 48, 01069 Dresden", phone: "0351 2644456", website: "http://clubelf.de", isOpenNow: false)]
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return bookmarks.count
-    }
-    
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        // 
-        return nil
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = bookmarksTableView.dequeueReusableCellWithIdentifier("tableCell", forIndexPath: indexPath)
-        
-        cell.textLabel?.text = bookmarks[indexPath.row].placeName
-        cell.detailTextLabel?.text = bookmarks[indexPath.row].placeType + " " + String(bookmarks[indexPath.row].avgRating)
-
-        // TODO: change to blue
-        cell.accessoryType = .DisclosureIndicator
-
-        return cell
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        // TODO: verify if this is still an issue -> https://forums.developer.apple.com/thread/24135
-        // and: http://stackoverflow.com/questions/32643765
-        self.performSegueWithIdentifier("showSingleBookmarkSegue", sender: indexPath)
-    }
-
+    return cell
+  }
+  
+  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    // TODO: verify if this is still an issue -> https://forums.developer.apple.com/thread/24135
+    // and: http://stackoverflow.com/questions/32643765
+    self.performSegueWithIdentifier("showSingleBookmarkSegue", sender: indexPath)
+  }
+  
 }
 

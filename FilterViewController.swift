@@ -108,7 +108,7 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
       stepper.minimumValue = 0
       stepper.maximumValue = 50000
       
-      stepper.value = 150
+      stepper.value = Double((self.mapViewControllerInstance!.radius!))
       stepper.stepValue = 50
 
       cell.contentView.addSubview(stepper)
