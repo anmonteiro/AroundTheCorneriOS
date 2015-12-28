@@ -12,6 +12,7 @@ class BookmarksManager {
   static let sharedInstance = BookmarksManager()
   var bookmarks : [SinglePlace]!
   var plistPath : String
+  
   init() {
     let directorys : [String]? = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory,NSSearchPathDomainMask.AllDomainsMask, true)
     let directories:[String] = directorys!;
@@ -26,7 +27,18 @@ class BookmarksManager {
     if let tempArr : [SinglePlace] = NSKeyedUnarchiver.unarchiveObjectWithFile(self.plistPath) as? [SinglePlace] {
       return tempArr
     }
+    
     return [SinglePlace]()
+  }
+  
+  func getBookmark(id : String) -> Int {
+    for var i = 0; i < bookmarks.count; i++ {
+      if bookmarks[i].id == id {
+        return i
+      }
+    }
+    
+    return -1
   }
   
   func addBookmark(bookmark : SinglePlace) {
@@ -36,21 +48,15 @@ class BookmarksManager {
   }
   
   func removeBookmark(bookmark : SinglePlace) -> Bool {
-    var index = -1
+    let idx = self.getBookmark(bookmark.id)
     
-    for var i = 0; i < bookmarks.count; i++ {
-      if bookmarks[i].id == bookmark.id {
-        index = i
-        break
-      }
-    }
-    
-    if index == -1 {
+    if idx == -1 {
       return false
     }
     
-    bookmarks.removeAtIndex(index)
+    bookmarks.removeAtIndex(idx)
     self.flushToDisk()
+    
     return true
   }
   

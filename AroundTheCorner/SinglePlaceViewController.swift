@@ -55,7 +55,8 @@ class SinglePlaceViewController : UIViewController, UITableViewDelegate, UITable
   
   func setupImageViewAndTypeLabel() {
     // TODO: eventually change from "named:" to "contentsOfUrl:"
-    self.placeImageView.image = UIImage(named: (bookmark?.placePhoto)!)
+    self.placeImageView.image = UIImage(data: bookmark!.placePhoto)
+    //self.placeImageView.image = UIImage(named: (bookmark?.placePhoto)!)
     
     self.placeTypeLabel.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.5)
     self.placeTypeLabel.textAlignment = .Center

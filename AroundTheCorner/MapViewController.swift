@@ -64,6 +64,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     if radius == nil {
       radius = 150
     }
+    
+    // TODO: do not populate nearby places if the map camera didn't change
     populateNearbyPlaces();
     
   }
@@ -71,6 +73,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
+  }
+  
+  deinit {
+    self.view.removeObserver(self, forKeyPath: "myLocation")
   }
   
   func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -131,9 +137,23 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       let type = result["types"]!![0] as! String
       let website = result["website"]! != nil ? result["website"] as! String : "-"
       
-      let thePlace = SinglePlace(id: placeID, name: name, type: type, ratings: [Int](), photoURL: "https://lh5.googleusercontent.com/-_l6M9ow75P4/VaIv0z1TqKI/AAAAAAAAAG0/ASZOidnvDHE/s1600-h500/", address: address, phone: phone_nr, website: website, isOpenNow: openNow)
+      let photoReference = result["photos"]! != nil ? result["photos"]!![0]!["photo_reference"]! as! String : ""
       
-      self.performSegueWithIdentifier("showSinglePlaceSegue", sender: thePlace)
+      ATCPlacesClient.getPlacePhoto(photoID: photoReference, maxHeight: 500, callback: {
+        (placePhotoData) -> Void in
+        
+        let thePlace : SinglePlace
+        
+        let idx = BookmarksManager.sharedInstance.getBookmark(placeID)
+        if idx != -1 {
+          thePlace = BookmarksManager.sharedInstance.bookmarks[idx]
+        }
+        else {
+          thePlace = SinglePlace(id: placeID, name: name, type: type, ratings: [Int](), photo: placePhotoData, address: address, phone: phone_nr, website: website, isOpenNow: openNow)
+        }
+        
+        self.performSegueWithIdentifier("showSinglePlaceSegue", sender: thePlace)
+      })
     })
   }
 }

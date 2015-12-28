@@ -9,6 +9,7 @@
 import GoogleMaps
 
 class ATCPlacesClient {
+  static let noPhotoData = UIImageJPEGRepresentation(UIImage(named: "no_photo")!, 1.0)
   static let GPlacesAPIKey = ATCUtils.readConfigurationFor(keys: ["GooglePlacesAPI", "APIKey"])
   static let session = NSURLSession(configuration:
     NSURLSessionConfiguration.defaultSessionConfiguration())
@@ -53,22 +54,26 @@ class ATCPlacesClient {
     }
   }
   
-  static func getPlacePhoto(photoID id : String, maxHeight : Int, callback : ((result: AnyObject) -> Void)) {
-    let urlString = "https://maps.googleapis.com/maps/api/place/photo?key=\(GPlacesAPIKey!)&photoreference=\(id)&maxheight=\(maxHeight)".stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
-    if let url = NSURL(string: urlString) {
-      let task = session.dataTaskWithURL(url, completionHandler: {
-        (responseData, urlResponse, error) -> Void in
-        if let jsonResult = try? NSJSONSerialization.JSONObjectWithData(responseData!, options: .MutableContainers) as! [String:AnyObject] {
-          dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let result = jsonResult["result"]! as AnyObject
-            callback(result: result)
-          })
-        } else {
-          // TODO: handle errors
-          print("Unexpected error parsing JSON!")
-        }
-      })
-      task.resume()
+  static func getPlacePhoto(photoID id : String, maxHeight : Int, callback : ((result: NSData) -> Void)) {
+    if id == "" {
+      callback(result: noPhotoData!)
+    }
+    else {
+      let urlString = "https://maps.googleapis.com/maps/api/place/photo?key=\(GPlacesAPIKey!)&photoreference=\(id)&maxheight=\(maxHeight)".stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+      if let url = NSURL(string: urlString) {
+        let task = session.dataTaskWithURL(url, completionHandler: {
+          (responseData, urlResponse, error) -> Void in
+          if let data = responseData {
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+              callback(result: data)
+            })
+          } else {
+            // TODO: handle errors
+            print("Unexpected error getting place photo!")
+          }
+        })
+        task.resume()
+      }
     }
   }
 }
