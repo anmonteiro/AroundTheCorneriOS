@@ -10,17 +10,29 @@ import Foundation
 
 class BookmarksManager {
   static let sharedInstance = BookmarksManager()
-  var bookmarks : [SinglePlace]
+  var bookmarks : [SinglePlace]!
+  var plistPath : String
   init() {
-    // TODO: read from file and instantiate the array
-    bookmarks = [SinglePlace(id: "1", name: "Club 11 e.V.", type: "Bar", ratings: [3, 4, 3, 4], photoURL: "placeTestImg",
-    address: "Hochschulstraße 48, 01069 Dresden", phone: "0351 2644456", website: "http://clubelf.de", isOpenNow: false)]
-
+    let directorys : [String]? = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory,NSSearchPathDomainMask.AllDomainsMask, true)
+    let directories:[String] = directorys!;
+    let pathToFile = directories[0]; //documents directory
+    let plistFile = "BookmarksArray.plist"
+    self.plistPath = pathToFile.stringByAppendingString("/" + plistFile)
+    
+    bookmarks = readBookmarksFromDisk()
+  }
+  
+  func readBookmarksFromDisk() -> [SinglePlace] {
+    if let tempArr : [SinglePlace] = NSKeyedUnarchiver.unarchiveObjectWithFile(self.plistPath) as? [SinglePlace] {
+      return tempArr
+    }
+    return [SinglePlace]()
   }
   
   func addBookmark(bookmark : SinglePlace) {
     // TODO: can the array ever contain the same?
     bookmarks.append(bookmark)
+    self.flushToDisk()
   }
   
   func removeBookmark(bookmark : SinglePlace) -> Bool {
@@ -36,7 +48,14 @@ class BookmarksManager {
     if index == -1 {
       return false
     }
+    
     bookmarks.removeAtIndex(index)
+    self.flushToDisk()
     return true
+  }
+  
+  func flushToDisk() {
+    NSKeyedArchiver.archiveRootObject(bookmarks, toFile: self.plistPath)
+    //print("I wrote an array to the file at\n\(plistPath)")
   }
 }

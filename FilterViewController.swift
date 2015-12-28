@@ -100,6 +100,7 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
     
     if indexPath.section == 0 {
       // "search radius" stepper section
+      // TODO: show 'm' unit
       let rect = CGRectMake(0, 0, cell.bounds.width, cell.bounds.height)
       let stepper = ATCRadiusStepper(frame: rect)
       
