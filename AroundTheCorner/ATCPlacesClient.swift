@@ -21,40 +21,49 @@ class ATCPlacesClient {
     if let url = NSURL(string: urlString) {
       let task = session.dataTaskWithURL(url, completionHandler: {
         (responseData, urlResponse, error) -> Void in
-        if let jsonResult = try? NSJSONSerialization.JSONObjectWithData(responseData!, options: .MutableContainers) as! [String:AnyObject] {
-          dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let results = jsonResult["results"] as! [AnyObject]
-            callback(result: results)
-          })
-        } else {
-          // TODO: handle errors
-          print("Unexpected error parsing JSON!")
+        // in case of error the array will be returned empty
+        var results = [AnyObject]()
+        if responseData != nil {
+          if let jsonResult = try? NSJSONSerialization.JSONObjectWithData(responseData!, options: .MutableContainers) as! [String:AnyObject] {
+            results = jsonResult["results"] as! [AnyObject]
+          } else {
+            print("Unexpected error parsing JSON!")
+          }
         }
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          callback(result: results)
+        })
       })
       task.resume()
     }
   }
   
-  static func getPlaceDetails(placeID id : String, callback : ((result: AnyObject) -> Void)) {
+  static func getPlaceDetails(placeID id : String, callback : ((result: AnyObject?) -> Void)) {
     let urlString = "https://maps.googleapis.com/maps/api/place/details/json?key=\(GPlacesAPIKey!)&placeid=\(id)".stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
     if let url = NSURL(string: urlString) {
       let task = session.dataTaskWithURL(url, completionHandler: {
         (responseData, urlResponse, error) -> Void in
-        if let jsonResult = try? NSJSONSerialization.JSONObjectWithData(responseData!, options: .MutableContainers) as! [String:AnyObject] {
-          dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            let result = jsonResult["result"]! as AnyObject
-            callback(result: result)
-          })
+        // in case of error the result constant will contain a nil value
+        let result : AnyObject?
+        if responseData != nil {
+          if let jsonResult = try? NSJSONSerialization.JSONObjectWithData(responseData!, options: .MutableContainers) as! [String:AnyObject] {
+            result = jsonResult["result"]! as AnyObject
+          } else {
+            print("Unexpected error parsing JSON!")
+            result = nil
+          }
         } else {
-          // TODO: handle errors
-          print("Unexpected error parsing JSON!")
+          result = nil
         }
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
+          callback(result: result)
+        })
       })
       task.resume()
     }
   }
   
-  static func getPlacePhoto(photoID id : String, maxHeight : Int, callback : ((result: NSData) -> Void)) {
+  static func getPlacePhoto(photoID id : String, maxHeight : Int, callback : ((result: NSData?) -> Void)) {
     if id == "" {
       callback(result: noPhotoData!)
     }
@@ -63,14 +72,16 @@ class ATCPlacesClient {
       if let url = NSURL(string: urlString) {
         let task = session.dataTaskWithURL(url, completionHandler: {
           (responseData, urlResponse, error) -> Void in
-          if let data = responseData {
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-              callback(result: data)
-            })
+          let result : NSData?
+          if responseData != nil {
+            result = responseData
           } else {
-            // TODO: handle errors
             print("Unexpected error getting place photo!")
+            result = nil
           }
+          dispatch_async(dispatch_get_main_queue(), { () -> Void in
+            callback(result: result)
+          })
         })
         task.resume()
       }

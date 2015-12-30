@@ -20,8 +20,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
-    
+
     locationManager.delegate = self
     locationManager.requestWhenInUseAuthorization()
     
@@ -65,7 +64,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     if radius == nil {
       radius = 150
     }
-
+    
     populateNearbyPlaces();
     
   }
@@ -120,16 +119,18 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       
       ATCPlacesClient.getNearbyPlaces(withFilters: filters!, radius: radius!, location: loc.coordinate, callback: {
         (results) -> Void in
-        
         mapView.clear()
         for place in results {
           let marker = GMSMarker()
           let location = place["geometry"]!!["location"]!!
           marker.position = CLLocationCoordinate2DMake(location["lat"]!! as! CLLocationDegrees, location["lng"]!! as! CLLocationDegrees)
-          let iconImgData = NSData(contentsOfURL: NSURL(string: place["icon"]!! as! String)!)
-          let iconImg = UIImage(data: iconImgData!)
-          let scaledIconImg = UIImage(CGImage: (iconImg?.CGImage)!, scale: (iconImg?.scale)! * 2, orientation: (iconImg?.imageOrientation)!)
-          marker.icon = scaledIconImg
+          if let iconImgData = NSData(contentsOfURL: NSURL(string: place["icon"]!! as! String)!) {
+            // iconImgData will be nil if connectivity is suddenly broken
+            let iconImg = UIImage(data: iconImgData)
+            let scaledIconImg = UIImage(CGImage: (iconImg?.CGImage)!, scale: (iconImg?.scale)! * 2, orientation: (iconImg?.imageOrientation)!)
+            marker.icon = scaledIconImg
+          }
+          
           marker.title = place["name"]!! as! String
           marker.appearAnimation = kGMSMarkerAnimationPop
           marker.snippet = "More >>"
@@ -142,8 +143,16 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
   
   func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
     let placeID = marker.userData as! String
+    
+    let alert = UIAlertController(title: "No Internet connection", message: "Your device needs access to the Internet to display place data. Only bookmarks can be accessed offline.", preferredStyle: UIAlertControllerStyle.Alert)
+    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+    
     ATCPlacesClient.getPlaceDetails(placeID: placeID, callback: {
       (result) -> Void in
+      guard let result = result else {
+        self.presentViewController(alert, animated: true, completion: nil)
+        return
+      }
       let address = result["formatted_address"] as! String
       let phone_nr = result["international_phone_number"]! != nil ? result["international_phone_number"] as! String : "-"
       let name = result["name"] as! String
@@ -155,6 +164,10 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       
       ATCPlacesClient.getPlacePhoto(photoID: photoReference, maxHeight: 500, callback: {
         (placePhotoData) -> Void in
+        guard let placePhotoData = placePhotoData else {
+          self.presentViewController(alert, animated: true, completion: nil)
+          return
+        }
         
         let thePlace : SinglePlace
         
