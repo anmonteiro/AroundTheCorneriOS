@@ -116,6 +116,8 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     }
     
     if let loc = mapView.myLocation {
+      recomputePlaces = false
+      
       ATCPlacesClient.getNearbyPlaces(withFilters: filters!, radius: radius!, location: loc.coordinate, callback: {
         (results) -> Void in
         
