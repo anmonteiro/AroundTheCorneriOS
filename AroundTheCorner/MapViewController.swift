@@ -11,6 +11,7 @@ import GoogleMaps
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
   var locationManager = CLLocationManager()
+  var recomputePlaces = true
   var didFindMyLocation = false
   var filters : [String]? = nil
   var radius : Int? = nil
@@ -26,7 +27,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     
     //        let camera = GMSCameraPosition.cameraWithLatitude(-33.86,
     //            longitude: 151.20, zoom: 6)
-    let mapView = GMSMapView(frame: CGRectZero)
+    let mapView = GMSMapView(frame: self.view.bounds)
     
     mapView.settings.compassButton = true;
     //mapView.myLocationEnabled = true
@@ -64,8 +65,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     if radius == nil {
       radius = 150
     }
-    
-    // TODO: do not populate nearby places if the map camera didn't change
+
     populateNearbyPlaces();
     
   }
@@ -76,7 +76,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
   }
   
   deinit {
-    self.view.removeObserver(self, forKeyPath: "myLocation")
+    // TODO: causing a warning:
+    // Attempting to load the view of a view controller while it is deallocating
+    // is not allowed and may result in undefined behavior
+    if let v = self.view as? GMSMapView {
+      v.removeObserver(self, forKeyPath: "myLocation")
+    }
   }
   
   func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
@@ -93,21 +98,28 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       if let mapView = self.view as? GMSMapView {
         let camPos = GMSCameraPosition.cameraWithTarget(myLocation.coordinate, zoom: 16.0)
         mapView.animateToCameraPosition(camPos)
-        //                mapView.camera =
         
         mapView.settings.myLocationButton = true
+        
+        
+        didFindMyLocation = true
+        populateNearbyPlaces()
       }
-      
-      didFindMyLocation = true
-      populateNearbyPlaces()
     }
   }
   
   func populateNearbyPlaces() {
-    if let loc = (self.view as! GMSMapView).myLocation {
+    let mapView = self.view as! GMSMapView
+    
+    if !recomputePlaces {
+      return
+    }
+    
+    if let loc = mapView.myLocation {
       ATCPlacesClient.getNearbyPlaces(withFilters: filters!, radius: radius!, location: loc.coordinate, callback: {
         (results) -> Void in
-        (self.view as! GMSMapView).clear()
+        
+        mapView.clear()
         for place in results {
           let marker = GMSMarker()
           let location = place["geometry"]!!["location"]!!
@@ -119,7 +131,7 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
           marker.title = place["name"]!! as! String
           marker.appearAnimation = kGMSMarkerAnimationPop
           marker.snippet = "More >>"
-          marker.map = (self.view as! GMSMapView)
+          marker.map = mapView
           marker.userData = place["place_id"] as! String
         }
       })

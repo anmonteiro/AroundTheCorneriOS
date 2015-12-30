@@ -54,6 +54,12 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
     self.performSegueWithIdentifier("applyFiltersSegue", sender: filterDict)
   }
   
+  private func areFiltersEqual(f1 : Array<String>, f2 : Array<String>) -> Bool {
+    let s1 = NSSet(array: f1)
+    let s2 = NSSet(array: f2)
+    
+    return s2.isEqualToSet(s1 as Set<NSObject>)
+  }
   
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "applyFiltersSegue" {
@@ -62,8 +68,18 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
       let filters = filterDict["places"] as! Array<String>
       let radiusValue = filterDict["radius"] as! Int
       
-      mapViewControllerInstance?.filters = filters
-      mapViewControllerInstance?.radius = radiusValue
+      let recomputePlaces = !areFiltersEqual(filters, f2: mapViewControllerInstance!.filters!) ||
+        radiusValue != mapViewControllerInstance?.radius
+      
+      mapViewControllerInstance?.recomputePlaces = recomputePlaces
+      
+      if recomputePlaces {
+        mapViewControllerInstance?.filters = filters
+        mapViewControllerInstance?.radius = radiusValue
+      }
+    } else if segue.identifier == "cancelSegue" {
+      // if we're cancelling it means that there are no new filters
+      mapViewControllerInstance?.recomputePlaces = false
     }
   }
 

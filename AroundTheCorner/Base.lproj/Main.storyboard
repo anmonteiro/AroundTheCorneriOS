@@ -56,7 +56,7 @@
                                     <navigationItem title="Filter" id="oRs-hm-p2X">
                                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="mIg-AF-dAS">
                                             <connections>
-                                                <segue destination="9pv-A4-QxB" kind="custom" identifier="Cancel" customClass="DismissSegue" id="v3r-Bo-YxD"/>
+                                                <segue destination="9pv-A4-QxB" kind="custom" identifier="cancelSegue" customClass="DismissSegue" id="v3r-Bo-YxD"/>
                                             </connections>
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Apply" id="67k-Fz-m8U">
