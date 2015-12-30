@@ -157,7 +157,19 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       let phone_nr = result["international_phone_number"]! != nil ? result["international_phone_number"] as! String : "-"
       let name = result["name"] as! String
       let openNow = result["opening_hours"]! != nil ? result["opening_hours"]!!["open_now"] as! Bool : false
-      let type = result["types"]!![0] as! String
+      
+      let types = result["types"]! as! Array<String>
+      let supportedTypes = Array(ATCUtils.placeTypes.values)
+      var type : String = "Unknown"
+      
+      for t in types {
+        if supportedTypes.contains(t) {
+          type = t.componentsSeparatedByString("_").joinWithSeparator(" ").capitalizedString
+          break
+        }
+      }
+      
+      
       let website = result["website"]! != nil ? result["website"] as! String : "-"
       
       let photoReference = result["photos"]! != nil ? result["photos"]!![0]!["photo_reference"]! as! String : ""

@@ -39,10 +39,10 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
   func applyFilter(sender: UIBarButtonItem) {
     var places = [String]()
     if let selectedRows = self.filterTableView.indexPathsForSelectedRows {
-      let filterKeys = Array(self.placeTypes.keys)
+      let filterKeys = Array(ATCUtils.placeTypes.keys)
       for ip in selectedRows {
         let idx = ip.row
-        places.append(self.placeTypes[filterKeys[idx]]!)
+        places.append(ATCUtils.placeTypes[filterKeys[idx]]!)
       }
     }
     else {
@@ -90,19 +90,13 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
    **                     **
    *************************/
   
-  var placeTypes = ["Bar" : "bar", "Bakery" : "bakery", "Cafe" : "cafe",
-    "Casino" : "casino", "Convenience Store" : "convenience_store",
-    "Grocery Store / Supermarket" : "grocery_or_supermarket",
-    "Liquor Store" : "liquor_store", "Night Club" : "night_club",
-    "Restaurant" : "restaurant"]
-  
   func numberOfSectionsInTableView(tableView: UITableView) -> Int {
     return 2;
   }
   
   func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     // the following assumes there are only 2 sections
-    return section == 0 ? 1 : placeTypes.count
+    return section == 0 ? 1 : ATCUtils.placeTypes.count
   }
   
   func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -132,9 +126,9 @@ class FilterViewController : UIViewController, UITableViewDelegate, UITableViewD
     }
     else {
       // place types section
-      let filters = Array(placeTypes.keys)
+      let filters = Array(ATCUtils.placeTypes.keys)
       cell.textLabel?.text = filters[indexPath.row]
-      if self.mapViewControllerInstance!.filters!.contains(placeTypes[filters[indexPath.row]]!) {
+      if self.mapViewControllerInstance!.filters!.contains(ATCUtils.placeTypes[filters[indexPath.row]]!) {
         tableView.selectRowAtIndexPath(indexPath, animated: false, scrollPosition: UITableViewScrollPosition.None)
       }
       

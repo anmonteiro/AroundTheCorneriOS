@@ -58,7 +58,7 @@ class SinglePlaceViewController : UIViewController, UITableViewDelegate, UITable
     self.placeImageView.image = UIImage(data: bookmark!.placePhoto)
     //self.placeImageView.image = UIImage(named: (bookmark?.placePhoto)!)
     
-    self.placeTypeLabel.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.5)
+    self.placeTypeLabel.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.6)
     self.placeTypeLabel.textAlignment = .Center
     self.placeTypeLabel.text = self.bookmark?.placeType
   }
