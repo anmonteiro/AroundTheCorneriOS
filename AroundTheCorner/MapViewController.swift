@@ -22,14 +22,11 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
     super.viewDidLoad()
 
     locationManager.delegate = self
-    locationManager.requestWhenInUseAuthorization()
-    
-    //        let camera = GMSCameraPosition.cameraWithLatitude(-33.86,
-    //            longitude: 151.20, zoom: 6)
+
     let mapView = GMSMapView(frame: self.view.bounds)
     
     mapView.settings.compassButton = true;
-    //mapView.myLocationEnabled = true
+
     mapView.addObserver(self, forKeyPath: "myLocation", options: NSKeyValueObservingOptions.New, context: nil)
     mapView.padding = UIEdgeInsetsMake(64, 0, 64, 0)
     
@@ -58,6 +55,12 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
   
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
+    
+    
+    if CLLocationManager.authorizationStatus() == .NotDetermined {
+      locationManager.requestWhenInUseAuthorization()
+    }
+    
     if filters == nil {
       filters = ["restaurant", "bar"]
     }
