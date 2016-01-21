@@ -55,7 +55,17 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
   
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(animated)
-    
+      
+    let alert = UIAlertController(title: "Around the Corner needs your location.", message: "Your device needs access to your location to display it on the map.", preferredStyle: UIAlertControllerStyle.Alert)
+    alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
+    alert.addAction(UIAlertAction(title: "Settings", style: UIAlertActionStyle.Default, handler: {(UIAlertAction) -> Void in
+      let settingsURL = NSURL(string: UIApplicationOpenSettingsURLString)
+      UIApplication.sharedApplication().openURL(settingsURL!)
+      }))
+
+    if !CLLocationManager.locationServicesEnabled() {
+      self.parentViewController!.presentViewController(alert, animated: true, completion: nil)
+    }
     
     if CLLocationManager.authorizationStatus() == .NotDetermined {
       locationManager.requestWhenInUseAuthorization()
