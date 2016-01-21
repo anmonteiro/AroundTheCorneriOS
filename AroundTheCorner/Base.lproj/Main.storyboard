@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="49e-Tb-3d3">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -262,105 +262,11 @@
                         <outlet property="placeTypeLabel" destination="Foc-aX-pFn" id="g8c-Xw-viL"/>
                         <outlet property="segmentedControl" destination="NdJ-NN-fWp" id="ntX-Cb-GNw"/>
                         <outlet property="tableView" destination="z6v-PG-zFA" id="4ZY-S9-Vcu"/>
-                        <segue destination="JwE-hm-k0m" kind="presentation" identifier="writeReviewSegue" id="jMm-Q1-HLt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lGx-rw-CLN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2238" y="361"/>
-        </scene>
-        <!--Write Review View Controller-->
-        <scene sceneID="zhB-XG-0He">
-            <objects>
-                <viewController id="JwE-hm-k0m" customClass="WriteReviewViewController" customModule="AroundTheCorner" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="7sq-7D-3Dx"/>
-                        <viewControllerLayoutGuide type="bottom" id="GRq-aI-L8b"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="7HU-Dn-bOS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cGh-FE-dCf">
-                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
-                                <items>
-                                    <navigationItem title="Title" id="nXa-CY-Q1o">
-                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="xHg-iM-NVA">
-                                            <connections>
-                                                <segue destination="IEZ-Cc-jhI" kind="custom" customClass="DismissSegue" id="nw5-Lf-wmm"/>
-                                            </connections>
-                                        </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="Send" id="ISc-d1-OPJ"/>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TzQ-Fe-n8n">
-                                <rect key="frame" x="0.0" y="64" width="600" height="195"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </tableView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Wzl-qv-K2t">
-                                <rect key="frame" x="61" y="313" width="240" height="128"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="44" translatesAutoresizingMaskIntoConstraints="NO" id="pfm-oH-MXH" customClass="RatingControl" customModule="AroundTheCorner" customModuleProvider="target">
-                                <rect key="frame" x="180" y="278" width="240" height="44"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="TzQ-Fe-n8n" firstAttribute="leading" secondItem="7HU-Dn-bOS" secondAttribute="leading" id="2hI-Vk-IJI"/>
-                            <constraint firstItem="cGh-FE-dCf" firstAttribute="top" secondItem="7HU-Dn-bOS" secondAttribute="topMargin" id="686-J6-Orb"/>
-                            <constraint firstAttribute="trailing" secondItem="cGh-FE-dCf" secondAttribute="trailing" id="68L-g6-ta9"/>
-                            <constraint firstItem="cGh-FE-dCf" firstAttribute="leading" secondItem="7HU-Dn-bOS" secondAttribute="leading" id="Aen-il-zfB"/>
-                            <constraint firstItem="cGh-FE-dCf" firstAttribute="top" secondItem="7HU-Dn-bOS" secondAttribute="top" id="G6U-cm-hMJ"/>
-                            <constraint firstAttribute="trailing" secondItem="TzQ-Fe-n8n" secondAttribute="trailing" id="JLY-7m-wyT"/>
-                            <constraint firstAttribute="trailing" secondItem="cGh-FE-dCf" secondAttribute="trailing" id="JSd-C8-wh7"/>
-                            <constraint firstItem="pfm-oH-MXH" firstAttribute="centerY" secondItem="7HU-Dn-bOS" secondAttribute="centerY" id="Mmb-I2-7Rb"/>
-                            <constraint firstItem="TzQ-Fe-n8n" firstAttribute="top" secondItem="cGh-FE-dCf" secondAttribute="bottom" id="VQU-98-gb4"/>
-                            <constraint firstItem="cGh-FE-dCf" firstAttribute="top" secondItem="7sq-7D-3Dx" secondAttribute="bottom" id="aCw-Ls-1x7"/>
-                            <constraint firstItem="cGh-FE-dCf" firstAttribute="centerX" secondItem="7HU-Dn-bOS" secondAttribute="centerX" id="gyU-yO-5ZY"/>
-                            <constraint firstItem="cGh-FE-dCf" firstAttribute="leading" secondItem="7HU-Dn-bOS" secondAttribute="leading" id="jBe-qr-jfj"/>
-                            <constraint firstItem="pfm-oH-MXH" firstAttribute="centerX" secondItem="7HU-Dn-bOS" secondAttribute="centerX" id="odk-bR-GhF"/>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="686-J6-Orb"/>
-                                <exclude reference="68L-g6-ta9"/>
-                                <exclude reference="Aen-il-zfB"/>
-                                <exclude reference="G6U-cm-hMJ"/>
-                            </mask>
-                        </variation>
-                    </view>
-                    <connections>
-                        <outlet property="navigationBar" destination="cGh-FE-dCf" id="Xao-aP-7tK"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="0bt-8E-E3g" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2911" y="360"/>
-        </scene>
-        <!--Settings-->
-        <scene sceneID="LUM-ni-eM7">
-            <objects>
-                <viewController id="jqK-gn-GGa" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="xzD-ps-tGa"/>
-                        <viewControllerLayoutGuide type="bottom" id="Q0d-wo-1EY"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="Uip-Vb-jZH">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Settings" image="tabbar-settings" id="3KA-NL-97G"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="XoC-4O-geI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="750" y="1041"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
@@ -375,7 +281,6 @@
                     <connections>
                         <segue destination="tt1-dO-lmP" kind="relationship" relationship="viewControllers" id="u7Y-xg-7CH"/>
                         <segue destination="jnO-wD-9IK" kind="relationship" relationship="viewControllers" id="lzU-1b-eKA"/>
-                        <segue destination="jqK-gn-GGa" kind="relationship" relationship="viewControllers" id="709-u6-bWG"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
@@ -424,10 +329,9 @@
     <resources>
         <image name="tabbar-bookmarks" width="33" height="33"/>
         <image name="tabbar-map" width="33" height="33"/>
-        <image name="tabbar-settings" width="33" height="33"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="v3r-Bo-YxD"/>
-        <segue reference="J3a-9X-U2y"/>
+        <segue reference="epi-u8-laN"/>
     </inferredMetricsTieBreakers>
 </document>

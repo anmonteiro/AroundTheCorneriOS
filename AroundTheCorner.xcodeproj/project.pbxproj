@@ -125,13 +125,13 @@
 		F15443E71BF77784009D3314 = {
 			isa = PBXGroup;
 			children = (
+				F14029D31C0335550003097B /* RatingControl.swift */,
 				F15443F21BF77784009D3314 /* AroundTheCorner */,
 				F15444091BF77784009D3314 /* AroundTheCornerTests */,
 				F15444141BF77784009D3314 /* AroundTheCornerUITests */,
 				A33D1EDB0DB8716FD44D90A9 /* Frameworks */,
 				7F2FCFD8FE53247FC15DD506 /* Pods */,
 				F15443F11BF77784009D3314 /* Products */,
-				F14029D31C0335550003097B /* RatingControl.swift */,
 			);
 			sourceTree = "<group>";
 		};
