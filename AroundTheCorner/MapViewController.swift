@@ -8,6 +8,7 @@
 
 import UIKit
 import GoogleMaps
+import ReachabilitySwift
 
 class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
   var locationManager = CLLocationManager()
@@ -127,6 +128,14 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       return
     }
     
+    let reachability : Reachability?
+    do {
+      reachability = try Reachability.reachabilityForInternetConnection()
+    } catch {
+      // some weird error creating the Reachability instance
+      reachability = nil
+    }
+    
     if let loc = mapView.myLocation {
       recomputePlaces = false
       
@@ -148,22 +157,34 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
           marker.appearAnimation = kGMSMarkerAnimationPop
           marker.snippet = "More >>"
           marker.map = mapView
-          marker.userData = place["place_id"] as! String
+          
+          let placeID = place["place_id"] as! String
+          marker.userData = placeID
+          
+          if let reach = reachability {
+            if reach.isReachableViaWiFi() {
+              self.getPlaceDetails(placeID, alertView: nil, callback: {
+                (place) -> Void in
+                marker.userData = place
+              })
+            }
+          }
         }
       })
     }
   }
   
-  func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
-    let placeID = marker.userData as! String
-    
-    let alert = UIAlertController(title: "No Internet connection", message: "Your device needs access to the Internet to display place data. Only bookmarks can be accessed offline.", preferredStyle: UIAlertControllerStyle.Alert)
-    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-    
+  func getPlaceDetails(placeID: String, callback : ((SinglePlace) -> Void)) {
+    getPlaceDetails(placeID, alertView: nil, callback: callback)
+  }
+  
+  func getPlaceDetails(placeID : String, alertView : UIAlertController?, callback : ((SinglePlace) -> Void)) {
     ATCPlacesClient.getPlaceDetails(placeID: placeID, callback: {
       (result) -> Void in
       guard let result = result else {
-        self.presentViewController(alert, animated: true, completion: nil)
+        if let alert = alertView {
+          self.presentViewController(alert, animated: true, completion: nil)
+        }
         return
       }
       let address = result["formatted_address"] as! String
@@ -190,7 +211,9 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
       ATCPlacesClient.getPlacePhoto(photoID: photoReference, maxHeight: 500, callback: {
         (placePhotoData) -> Void in
         guard let placePhotoData = placePhotoData else {
-          self.presentViewController(alert, animated: true, completion: nil)
+          if let alert = alertView {
+            self.presentViewController(alert, animated: true, completion: nil)
+          }
           return
         }
         
@@ -204,9 +227,30 @@ class MapViewController: UIViewController, CLLocationManagerDelegate, GMSMapView
           thePlace = SinglePlace(id: placeID, name: name, type: type, ratings: [Int](), photo: placePhotoData, address: address, phone: phone_nr, website: website, isOpenNow: openNow)
         }
         
-        self.performSegueWithIdentifier("showSinglePlaceSegue", sender: thePlace)
+        callback(thePlace)
       })
     })
+  }
+  
+  func mapView(mapView: GMSMapView!, didTapInfoWindowOfMarker marker: GMSMarker!) {
+    let segueIdentifier = "showSinglePlaceSegue"
+    
+    if marker.userData is String {
+      let placeID = marker.userData as! String
+      
+      let alert = UIAlertController(title: "No Internet connection", message: "Your device needs access to the Internet to display place data. Only bookmarks can be accessed offline.", preferredStyle: UIAlertControllerStyle.Alert)
+      alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+      
+      getPlaceDetails(placeID, alertView: alert, callback: {
+        (place) -> Void in
+        self.performSegueWithIdentifier(segueIdentifier, sender: place)
+      })
+    } else {
+      // if it's not a string we know the place has been prefetched
+      let thePlace = marker.userData as! SinglePlace
+      self.performSegueWithIdentifier(segueIdentifier, sender: thePlace)
+    }
+    
   }
 }
 
