@@ -17,7 +17,7 @@ class ATCPlacesClient {
   static func getNearbyPlaces(withFilters filters : [String], radius : Int, location : CLLocationCoordinate2D, callback : ((result: [AnyObject]) -> Void)) {
     let filtersString = filters.joinWithSeparator("|")
     // TODO: follow pages if more than 20 results
-    let urlString = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=\(filtersString)&location=\(location.latitude),\(location.longitude)&radius=\(radius)&key=\(GPlacesAPIKey!)".stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
+    let urlString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?types=\(filtersString)&location=\(location.latitude),\(location.longitude)&radius=\(radius)&key=\(GPlacesAPIKey!)".stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())!
     if let url = NSURL(string: urlString) {
       let task = session.dataTaskWithURL(url, completionHandler: {
         (responseData, urlResponse, error) -> Void in
