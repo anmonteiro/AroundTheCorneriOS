@@ -205,62 +205,30 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="z6v-PG-zFA">
-                                <rect key="frame" x="0.0" y="308" width="600" height="254"/>
+                                <rect key="frame" x="0.0" y="264" width="600" height="336"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L0f-OP-JSd">
-                                <rect key="frame" x="0.0" y="562" width="600" height="30"/>
-                                <state key="normal" title="Button"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.borderWidth" value="2"/>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="7"/>
-                                </userDefinedRuntimeAttributes>
-                            </button>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="NdJ-NN-fWp">
-                                <rect key="frame" x="220" y="272" width="160" height="29"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="160" id="YDc-a4-ag7"/>
-                                </constraints>
-                                <segments>
-                                    <segment title="Details"/>
-                                    <segment title="Reviews"/>
-                                </segments>
-                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="PJD-YV-oTD" firstAttribute="top" secondItem="j3m-Uj-bcx" secondAttribute="bottom" id="1ET-e9-Vtv"/>
-                            <constraint firstAttribute="trailing" secondItem="L0f-OP-JSd" secondAttribute="trailing" id="7ul-3u-uTf"/>
-                            <constraint firstItem="hav-kG-mmk" firstAttribute="top" secondItem="L0f-OP-JSd" secondAttribute="bottom" constant="8" id="CW5-IG-3d9"/>
+                            <constraint firstItem="hav-kG-mmk" firstAttribute="top" secondItem="z6v-PG-zFA" secondAttribute="bottom" id="8Kw-Tp-Qk6"/>
                             <constraint firstItem="Foc-aX-pFn" firstAttribute="top" secondItem="PJD-YV-oTD" secondAttribute="bottom" constant="-35" id="DL4-O7-aja"/>
                             <constraint firstItem="PJD-YV-oTD" firstAttribute="leading" secondItem="leG-VY-cO0" secondAttribute="leading" id="SJK-cL-0bQ"/>
-                            <constraint firstItem="L0f-OP-JSd" firstAttribute="top" secondItem="z6v-PG-zFA" secondAttribute="bottom" constant="8" id="Vr3-Zw-wyN"/>
                             <constraint firstItem="z6v-PG-zFA" firstAttribute="leading" secondItem="leG-VY-cO0" secondAttribute="leading" id="fnY-sE-AyQ"/>
-                            <constraint firstItem="NdJ-NN-fWp" firstAttribute="top" secondItem="Foc-aX-pFn" secondAttribute="bottom" constant="8" id="h1Q-bW-zQL"/>
+                            <constraint firstItem="z6v-PG-zFA" firstAttribute="top" secondItem="Foc-aX-pFn" secondAttribute="bottom" id="ieD-4b-BbT"/>
                             <constraint firstAttribute="trailing" secondItem="z6v-PG-zFA" secondAttribute="trailing" id="ieo-QP-BM2"/>
                             <constraint firstItem="z6v-PG-zFA" firstAttribute="centerX" secondItem="leG-VY-cO0" secondAttribute="centerX" id="kYE-OW-yYW"/>
                             <constraint firstAttribute="trailing" secondItem="PJD-YV-oTD" secondAttribute="trailing" id="nng-ae-M42"/>
-                            <constraint firstItem="z6v-PG-zFA" firstAttribute="top" secondItem="NdJ-NN-fWp" secondAttribute="bottom" constant="8" id="obF-3b-h2w"/>
-                            <constraint firstItem="NdJ-NN-fWp" firstAttribute="centerX" secondItem="leG-VY-cO0" secondAttribute="centerX" id="sEL-be-XaT"/>
-                            <constraint firstItem="L0f-OP-JSd" firstAttribute="centerX" secondItem="leG-VY-cO0" secondAttribute="centerX" id="uVJ-dB-cKc"/>
-                            <constraint firstItem="L0f-OP-JSd" firstAttribute="leading" secondItem="leG-VY-cO0" secondAttribute="leading" id="uwh-0O-ZLv"/>
                             <constraint firstItem="Foc-aX-pFn" firstAttribute="centerX" secondItem="PJD-YV-oTD" secondAttribute="centerX" id="vJM-ha-Dyy"/>
-                            <constraint firstItem="L0f-OP-JSd" firstAttribute="top" secondItem="z6v-PG-zFA" secondAttribute="bottom" id="wCk-xC-Sqe"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="Vr3-Zw-wyN"/>
-                            </mask>
-                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="UiL-CP-DWO"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="howMuchBtn" destination="L0f-OP-JSd" id="dfe-Ye-7a0"/>
                         <outlet property="placeImageView" destination="PJD-YV-oTD" id="ieZ-Nc-lM7"/>
                         <outlet property="placeTypeLabel" destination="Foc-aX-pFn" id="g8c-Xw-viL"/>
-                        <outlet property="segmentedControl" destination="NdJ-NN-fWp" id="ntX-Cb-GNw"/>
                         <outlet property="tableView" destination="z6v-PG-zFA" id="4ZY-S9-Vcu"/>
                     </connections>
                 </viewController>

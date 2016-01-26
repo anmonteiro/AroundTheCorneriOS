@@ -13,9 +13,7 @@ class SinglePlaceViewController : UIViewController, UITableViewDelegate, UITable
   
   @IBOutlet weak var placeImageView: UIImageView!
   @IBOutlet weak var placeTypeLabel: UILabel!
-  @IBOutlet weak var howMuchBtn: UIButton!
   @IBOutlet weak var tableView: UITableView!
-  @IBOutlet weak var segmentedControl: UISegmentedControl!
   
   /****************************
    **                        **
@@ -31,8 +29,6 @@ class SinglePlaceViewController : UIViewController, UITableViewDelegate, UITable
     
     self.setupNavigationItem()
     self.setupImageViewAndTypeLabel()
-    self.setupSegmentedControl()
-    self.setupHowMuchBtn()
   }
   
   /***************************
@@ -61,45 +57,6 @@ class SinglePlaceViewController : UIViewController, UITableViewDelegate, UITable
     self.placeTypeLabel.backgroundColor = UIColor(red: 255, green: 255, blue: 255, alpha: 0.6)
     self.placeTypeLabel.textAlignment = .Center
     self.placeTypeLabel.text = self.bookmark?.placeType
-  }
-  
-  func setupHowMuchBtn() {
-    // TODO: button border color to blue
-    let buttonText: NSString = "How much did you pay?\ne.g.: price for 1 meal, 1 drink, 1 entry fee..."
-    
-    //getting the range to separate the button title strings
-    let newlineRange: NSRange = buttonText.rangeOfString("\n")
-    
-    //getting both substrings
-    var substring1: NSString = ""
-    var substring2: NSString = ""
-    
-    if(newlineRange.location != NSNotFound) {
-      substring1 = buttonText.substringToIndex(newlineRange.location)
-      substring2 = buttonText.substringFromIndex(newlineRange.location)
-    }
-    
-    //assigning diffrent fonts to both substrings
-    let font : UIFont? = UIFont.systemFontOfSize(17.0)
-    let attrString = NSMutableAttributedString(
-      string: substring1 as String,
-      attributes: [NSFontAttributeName : font!])
-    
-    let font1:UIFont? = UIFont.systemFontOfSize(11.0)
-    let attrString1 = NSMutableAttributedString(
-      string: substring2 as String,
-      attributes: [NSFontAttributeName : font1!])
-    
-    //appending both attributed strings
-    attrString.appendAttributedString(attrString1)
-    
-    howMuchBtn.titleLabel?.lineBreakMode = .ByWordWrapping
-    howMuchBtn.titleLabel?.textAlignment = .Center
-    howMuchBtn.setAttributedTitle(attrString, forState: .Normal)
-  }
-  
-  func setupSegmentedControl() {
-    self.segmentedControl.addTarget(self, action: "onSegmentedControlChanged:", forControlEvents: .ValueChanged)
   }
   
   /***************************
@@ -151,125 +108,32 @@ class SinglePlaceViewController : UIViewController, UITableViewDelegate, UITable
    **                     **
    *************************/
   
-  func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-    // Assume there are only two buttons in the segmented control
-    if self.segmentedControl.selectedSegmentIndex == 0 {
-      return 1
-    }
-    else {
-      return 2
-    }
-  }
-  
-  func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    if self.segmentedControl.selectedSegmentIndex == 0 {
-      return nil
-    }
-    
-    switch section {
-    case 0: return "Google ratings"
-    case 1: return "Around The Corner ratings"
-      
-      // will never be called
-    default: return nil
-    }
-  }
-  
   func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    // Assume there are only two buttons in the segmented control
-    if self.segmentedControl.selectedSegmentIndex == 0 {
-      return 5
-    }
-    else {
-      if section == 0 {
-        return 1
-      }
-      else {
-        return 2
-      }
-      
-    }
+    return 6
   }
   
   func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-    var cell : UITableViewCell?
+    var cell : UITableViewCell? = tableView.dequeueReusableCellWithIdentifier("tableCellValue2")
     
-    // Assume there are only two buttons in the segmented control
-    if self.segmentedControl.selectedSegmentIndex == 0 {
-      cell = tableView.dequeueReusableCellWithIdentifier("tableCellValue2")
-      if cell == nil {
-        cell = UITableViewCell(style: .Value2, reuseIdentifier: "tableCellValue2")
-      }
-      
-      let iconImgNames = ["icon-marker", "icon-phone", "icon-globe", "icon-clock", "icon-euro"]
-      let cellValues = [bookmark!.address, bookmark!.phone, bookmark!.website, bookmark!.isOpenNow ? "Open today!" : "Closed", "≈ €3"]
-      
-      let attachment = NSTextAttachment()
-      attachment.image = UIImage(named: iconImgNames[indexPath.row])
-      
-      let attachmentStr = NSAttributedString(attachment: attachment)
-      
-      cell?.textLabel?.attributedText = attachmentStr
-      cell?.detailTextLabel?.textAlignment
-      cell?.detailTextLabel?.text = cellValues[indexPath.row]
+    if cell == nil {
+      cell = UITableViewCell(style: .Value2, reuseIdentifier: "tableCellValue2")
     }
-    else {
-      cell = tableView.dequeueReusableCellWithIdentifier("tableCellDefault")
-      if cell == nil {
-        cell = UITableViewCell(style: .Subtitle, reuseIdentifier: "tableCellDefault")
-      }
-      
-      // TODO: disclosure indicator appears gray, change to blue
-      cell?.accessoryType = .DisclosureIndicator
-      // TODO: Add stars instead of the number
-      if indexPath.section == 0 {
-        // TODO: Add actual google ratings
-        // Google ratings
-        cell?.textLabel?.text = "3.5"//String((bookmark?.avgRating)!)
-        cell?.detailTextLabel?.text = "From X user reviews" //+ String((bookmark?.numRatings)!) + " user reviews"
-      }
-      else {
-        // ATC ratings
-        if indexPath.row == 0 {
-          cell?.textLabel?.text = "3.5" // String((bookmark?.avgRating)!)
-          cell?.detailTextLabel?.text = "From X user reviews" // + String((bookmark?.numRatings)!) + " user reviews"
-        }
-        else {
-          // TODO: Consider changing this to a simple button; would make things easier
-          cell = UITableViewCell(style: .Default, reuseIdentifier: "tableCellDefault")
-          cell?.accessoryType = .None
-          //cell?.indentationLevel = 4
-          cell?.textLabel?.textAlignment = .Center
-          cell?.detailTextLabel?.text = ""
-          cell?.detailTextLabel?.textAlignment = .Right
-          cell?.textLabel?.font = UIFont.systemFontOfSize(17.0, weight: UIFontWeightHeavy)
-          cell?.textLabel?.text = "Leave a review!"
-        }
-      }
+
+    if indexPath.row == 0 {
+      return cell!
     }
     
+    let iconImgNames = ["icon-marker", "icon-phone", "icon-globe", "icon-clock", "icon-euro"]
+    let cellValues = [bookmark!.address, bookmark!.phone, bookmark!.website, bookmark!.isOpenNow ? "Open today!" : "Closed", "≈ €3"]
+    
+    let attachment = NSTextAttachment()
+    attachment.image = UIImage(named: iconImgNames[indexPath.row - 1])
+    
+    let attachmentStr = NSAttributedString(attachment: attachment)
+    
+    cell?.textLabel?.attributedText = attachmentStr
+    cell?.detailTextLabel?.textAlignment
+    cell?.detailTextLabel?.text = cellValues[indexPath.row - 1]
     return cell!
-  }
-  
-  func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-    if self.segmentedControl.selectedSegmentIndex == 0 {
-      // Details tableview
-    }
-    else {
-      // Reviews tableview
-      if indexPath.section == 0 {
-        // Google Ratings
-      }
-      else {
-        if indexPath.row == 0 {
-          // ATC Ratings
-        }
-        else {
-          // "Leave a review"
-          // Assume row == 1 (2nd row)
-          self.performSegueWithIdentifier("writeReviewSegue", sender: self)
-        }
-      }
-    }
   }
 }
